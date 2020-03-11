@@ -1,10 +1,16 @@
 ##掲示板
 
-##機能
+##　機能
+
 ・登録
-<br>・記事を追加
-<br>・コメント
-##環境
+１．github　Appを作る
+https://developer.github.com/apps/building-github-apps/creating-a-github-app/
+
+・記事を追加
+
+・コメント
+##　環境
 ・SpringBoot
-<br>・MySQL
-<br>・git
+・MySQL/H2
+・git
+・mybatis
