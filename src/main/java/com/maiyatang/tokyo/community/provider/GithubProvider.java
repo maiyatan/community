@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.maiyatang.tokyo.community.dto.AccessTokenDTO;
 import com.maiyatang.tokyo.community.dto.GithubUser;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,21 +12,21 @@ import java.io.IOException;
 @Component
 public class GithubProvider {
 
+    @Value("${github.access_token.uri}")
+    private String accessTokenUrl;
     /**
      * AccessTokenを取得メソッド
+     * okHttpのPost例を利用,参考：https://square.github.io/okhttp/#post-to-a-server
      * @param accessTokenDTO
      * @return AccessToken
      */
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
-        final String url = "https://github.com/login/oauth/access_token";
 
-        // okHttpのPost例を利用して、AccessTokenを取得する
-        // 参考：https://square.github.io/okhttp/#post-to-a-server
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
         Request request = new Request.Builder()
-                .url(url)
+                .url(accessTokenUrl)
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
@@ -42,6 +43,7 @@ public class GithubProvider {
 
     /**
      *Githubウーザ個人情報を取得メソッド
+     *okHttpのget例を利用する,参考：https://square.github.io/okhttp/#post-to-a-server
      * @param accessToken
      * @return Githubウーザ個人情報
      */
