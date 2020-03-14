@@ -12,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.Data;
 import java.util.UUID;
 
@@ -24,7 +26,6 @@ public class AuthoriaController {
 
     @Autowired(required=false)
     private UserMapper uerMapper;
-
 
     @Value("${github.client.id}")
     private String clientId;
@@ -44,10 +45,10 @@ public class AuthoriaController {
     @GetMapping("/callback")
     public String callback(@RequestParam(value = "code", required = false) String code,
                            @RequestParam(value = "state", required = false) String state,
-                             HttpServletRequest request,
+                           HttpServletRequest request, HttpServletResponse response,
                              Model model) {
 
-        //AccessTokenDTOの値をセットする
+        //AccessTokenDTOの値を設定する
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(secret);
@@ -61,13 +62,18 @@ public class AuthoriaController {
             User user = new User();
             user.setName(githubUser.getLogin());
             user.setAccountId(githubUser.getId().toString());
-            user.setToken(UUID.randomUUID().toString());
+            //生成36位的UUID，作为唯一标识的token
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setCreateTime(System.currentTimeMillis());
             user.setModifiedTime(user.getCreateTime());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             // ユーザー個人情報をテーブルuserにセット
             uerMapper.insertGithubUser(user);
-            // cookie,sessionを作る
-            request.getSession().setAttribute("user",githubUser);
+            // add cookie in response
+            response.addCookie(new Cookie("token",token));
+//            // cookie,sessionを作る
+//            request.getSession().setAttribute("user",githubUser);
             return "redirect:/";
         }else {
             return "redirect:/";

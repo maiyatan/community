@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">吐槽日本</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="搜索吐槽话题...">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"
+                                                                            aria-hidden="true"></span></button>
+                    </span>
+                    </div><!-- /input-group -->
+                </form>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">活动 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">奇葩日本</a></li>
+                    <li><a href="#">黑暗料理</a></li>
+                    <li><a href="/publish" th:if="${session.user} != null" style="font-weight: bold;color: red">我要吐槽 <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:if="${session.user} == null"><a
+                            href="https://github.com/login/oauth/authorize?client_id=Iv1.3e4bf8c3d2021cde&redirect_uri=http://localhost:8080/callback&scope=user&status=1">登录</a>
+                    </li>
+                    <li><a href="#">帮助 <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
+
+                    <li><img th:src="${session.user.avatarUrl}" alt="" class="img-circle img-avatar"></li>
+                    <li class="dropdown" th:if="${session.user} != null">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" th:text="${session.user.name}"></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">个人信息</a></li>
+                            <li><a href="#">消息中心</a></li>
+                            <li><a href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+</body>
+</html>
