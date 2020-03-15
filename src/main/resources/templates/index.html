@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/index.css">
     <script src="jquery/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
@@ -13,18 +14,37 @@
 <!--ヘーダを導入する-->
 <div th:insert="~{header::header}"></div>
 <!--body-->
-<div class="container-fluid">
-    <ul class="nav nav-tabs nav-justified">
-        home
-    </ul>
-    <ul class="nav nav-tabs nav-justified">
-        work
-    </ul>
-    <ul class="nav nav-tabs nav-justified">
-        other
-    </ul>
+<div class="container-fluid container-text">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 不吐不快</h2>
+            <!--分割线-->
+            <hr>
+            <div class="media" th:each="tucaoInfo:${tucaoInfos}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object index-img-avatar img-rounded" th:src="${tucaoInfo.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    <div th:text="${tucaoInfo.description}"></div>
+                    <div>
+                    <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •
+                        <span th:text="${tucaoInfo.getViewCount()}"></span> 次浏览 •
+                        <span th:text="${tucaoInfo.getLikeCount()}"></span> <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> •
+                        <td th:text="${#dates.format(tucaoInfo.getCreateTime(),'yyyy-MM-dd HH:mm')}"></td>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h2>热门话题</h2>
+            <h2>广告栏</h2>
+            <img class="img-thumbnail" src="../img/japnese it.png" height="200" width="400"/>
+        </div>
+    </div>
 </div>
-
-
 </body>
 </html>

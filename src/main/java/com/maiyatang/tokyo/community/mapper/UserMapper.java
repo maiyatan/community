@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE id = #{id}")
-    User findByState(@Param("id") String id);
+    User findByUserId(@Param("id") Integer id);
 
     // GithubUserユーザー個人情報を挿入
     @Insert("insert into user(account_id,name,token,create_time,modified_time,avatar_url) values " +
