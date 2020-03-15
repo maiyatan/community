@@ -18,6 +18,9 @@ public interface TocaoTextMapper {
     void insertTocaoText(TucaoText text);
 
     // ツッコミ情報を取得する
-    @Select("select * from TOCAO_Text")
-    List<TucaoText> getTucaoInfo();
+    @Select("select * from TOCAO_Text limit #{offSet},#{size} ")
+    List<TucaoText> getTucaoInfo(@Param(value = "offSet") Integer page,@Param(value = "size")Integer size);
+    // ツッコミ情報の件数を取得する
+    @Select("SELECT COUNT(1) FROM TOCAO_Text;")
+    Integer getTucaoInfoCount();
 }

@@ -20,25 +20,60 @@
             <h2><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 不吐不快</h2>
             <!--分割线-->
             <hr>
-            <div class="media" th:each="tucaoInfo:${tucaoInfos}">
+            <div class="media" th:each="tucaoInfo:${paginationDTO.tucaoInfo}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object index-img-avatar img-rounded" th:src="${tucaoInfo.user.avatarUrl}">
+                        <img class="media-object index-img-avatar img-rounded" th:src="${tucaoInfo.user.getAvatarUrl()}">
                     </a>
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
                     <div th:text="${tucaoInfo.description}"></div>
                     <div>
-                    <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •
+                        <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •
                         <span th:text="${tucaoInfo.getViewCount()}"></span> 次浏览 •
-                        <span th:text="${tucaoInfo.getLikeCount()}"></span> <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> •
+                        <span th:text="${tucaoInfo.getLikeCount()}"></span> <span class="glyphicon glyphicon-thumbs-up"
+                                                                                  aria-hidden="true"></span> •
                         <td th:text="${#dates.format(tucaoInfo.getCreateTime(),'yyyy-MM-dd HH:mm')}"></td>
                     </div>
                 </div>
             </div>
+            <!--分页-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${paginationDTO.showFirstPage}">
+                        <!--the first page-->
+                        <a th:href="@{/(page=1)}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${paginationDTO.showPrevious}">
+                        <!--the previous-->
+                        <a th:href="@{/(page=${paginationDTO.getPage()-1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <!--高亮设置-->
+                    <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.getPage()==page}?'active':'' ">
+                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${paginationDTO.showNext}">
+                        <!--tht next page-->
+                        <a th:href="@{/(page=${paginationDTO.getPage()+1})}" href="#" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${paginationDTO.showLastPage}">
+                        <!--tht last page-->
+                        <a th:href="@{/(page=${paginationDTO.getTotalPage()})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
         <hr>
+        <!--右边侧栏-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h2>热门话题</h2>
             <h2>广告栏</h2>

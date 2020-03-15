@@ -1,16 +1,19 @@
 package com.maiyatang.tokyo.community.controller;
 
 import com.maiyatang.tokyo.community.common.CookieCnt;
+import com.maiyatang.tokyo.community.dto.PaginationDTO;
 import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
 import com.maiyatang.tokyo.community.model.User;
 import com.maiyatang.tokyo.community.service.IndexService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +30,16 @@ public class IndexController {
     IndexService indexService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, Model model) {
+    public String index(HttpServletRequest request,
+                        Model model,
+                        @RequestParam(value = "page",defaultValue = "1") Integer page,
+                        @RequestParam(value = "size",defaultValue = "5") Integer size) {
 
         // ツッコミ情報を取得する
-        List<TucaoTextDTO> tucaoInfos = indexService.getTucaoInfoList();
+        PaginationDTO paginationDTO = indexService.getTucaoInfoList(page,size);
         // user情報をTucaoTextDTOに入れる
 
-        model.addAttribute("tucaoInfos",tucaoInfos);
+        model.addAttribute("paginationDTO",paginationDTO);
 
         return "index";
     }
