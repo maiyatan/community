@@ -42,19 +42,19 @@ public class PublishController {
                               HttpServletResponse response,
                               Model model) {
         // user情報を取得する
-        User user = CookieCnt.getUserInfoByToken(request, userMapper);
-        if (user != null) {
-            request.getSession().setAttribute("user",user);
+        User user = (User)request.getSession().getAttribute("user");
+        // userがnullの判断
+        if (user == null) {
+            return "redirect:/";
         }
         // 画面を利用するため、値を渡す
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
         // ユーザー個人情報をチャックする
-        if (!publishService.checkUserInput(title, description, tag, model, user)){
+        if (!publishService.checkUserInput(title, description, tag, model)){
             return "publish";
         }
-
         // 文章の情報をセットする
         TucaoText tucaoText = new TucaoText();
         tucaoText.setCreator(user.getId());

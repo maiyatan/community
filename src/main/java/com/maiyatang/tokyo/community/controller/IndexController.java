@@ -28,11 +28,6 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model) {
-        // user情報を取得する
-        User user = CookieCnt.getUserInfoByToken(request, userMapper);
-        if (user != null) {
-            request.getSession().setAttribute("user",user);
-        }
 
         // ツッコミ情報を取得する
         List<TucaoTextDTO> tucaoInfos = indexService.getTucaoInfoList();

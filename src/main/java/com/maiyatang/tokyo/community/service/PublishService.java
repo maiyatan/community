@@ -14,19 +14,14 @@ import javax.validation.Valid;
 public class PublishService {
 
     /**
-     * ユーザー個人情報をチャックする
+     * 入力情報をチャックする
      * @param title タイトル
      * @param description　
      * @param tag　タッグ
      * @param model　
-     * @param user　ユーザー
      */
-    public Boolean checkUserInput(String title, String description, String tag, Model model, User user) {
-        // userがnullの判断
-        if (user == null) {
-            model.addAttribute("errorMessage", "用户未登录！");
-            return false;
-        }
+    public Boolean checkUserInput(String title, String description, String tag, Model model) {
+
         //　入力情報をチャックする
         if (title == null||title=="") {
             model.addAttribute("errorMessage", "标题不能为空！");
