@@ -9,6 +9,7 @@ import com.maiyatang.tokyo.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,24 +18,23 @@ import java.util.List;
  * publish service
  */
 @Service
-public class IndexService {
-    @Autowired(required = false)
-    TucaoTextMapper tocaoTextMapper;
+public class ProfileService {
 
+    @Autowired(required = false)
+    TucaoTextMapper tucaoTextMapper;
     @Autowired(required = false)
     UserMapper userMapper;
 
     /**
      * ツッコミ情報を取得する
-     *
+     * @param userId
      * @param page
      * @param size
      * @return
      */
-    public PaginationDTO getTucaoInfoList(Integer page, Integer size) {
+    public PaginationDTO getMyTucaoInfo(Integer userId, Integer page, Integer size) {
         Integer offSet = size * (page - 1);
-        // ツッコミ情報を取得する
-        List<TucaoText> tucaoInfoList = tocaoTextMapper.getTucaoInfo(offSet, size);
+        List<TucaoText> tucaoInfoList = tucaoTextMapper.getTucaoInfoByUserId(userId, offSet, size);
         List<TucaoTextDTO> tucaoInfDtoList = new ArrayList<TucaoTextDTO>();
 
         for (TucaoText tucaoInfo : tucaoInfoList) {
@@ -50,11 +50,19 @@ public class IndexService {
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setTucaoInfo(tucaoInfDtoList);
         // ツッコミ情報の件数を取得する
-        Integer totalCount = tocaoTextMapper.getTucaoInfoCount();
+        Integer totalCount = tucaoTextMapper.getTucaoInfoCountByUserId(userId);
         // page分ける
         paginationDTO.setPagination(page,size,totalCount);
 
         return paginationDTO;
     }
 
+    /**
+     * ツッコミ情報の件数を取得する
+     * @param userId
+     * @return
+     */
+    public Integer getTucaoInfoCountByUserId(Integer userId) {
+        return tucaoTextMapper.getTucaoInfoCountByUserId(userId);
+    }
 }

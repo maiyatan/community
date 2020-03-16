@@ -1,7 +1,6 @@
 package com.maiyatang.tokyo.community.controller;
 
-import com.maiyatang.tokyo.community.common.CookieCnt;
-import com.maiyatang.tokyo.community.mapper.TocaoTextMapper;
+import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
 import com.maiyatang.tokyo.community.model.User;
@@ -16,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Controller
 public class PublishController {
     @Autowired(required = false)
-    TocaoTextMapper toCaotext;
+    TucaoTextMapper toCaotext;
 
     @Autowired(required = false)
     UserMapper userMapper;

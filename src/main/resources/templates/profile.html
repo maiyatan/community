@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${sectionName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <script src="/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<!--ヘーダを導入する-->
+<div th:insert="~{header::header}"></div>
+<!--body-->
+<div class="container-fluid container-text">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2>
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                <span th:text=" ${sectionName}"></span>
+            </h2>
+            <!--分割线-->
+            <hr>
+            <div class="media" th:each="tucaoInfo:${paginationDTO.tucaoInfo}    ">
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    <div th:text="${tucaoInfo.description}"></div>
+                    <div>
+                        <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •
+                        <span th:text="${tucaoInfo.getViewCount()}"></span> 次浏览 •
+                        <span th:text="${tucaoInfo.getLikeCount()}"></span> <span class="glyphicon glyphicon-thumbs-up"
+                                                                                  aria-hidden="true"></span> •
+                        <td th:text="${#dates.format(tucaoInfo.getCreateTime(),'yyyy-MM-dd')}"></td>
+                    </div>
+                </div>
+            </div>
+            <!--分割线-->
+            <hr>
+            <!--分页-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${paginationDTO.showFirstPage}">
+                        <!--the first page-->
+                        <a th:href="@{'/profile/'+${section}(page=1)}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${paginationDTO.showPrevious}">
+                        <!--the previous-->
+                        <a th:href="@{'/profile/'+${section}(page=${paginationDTO.getPage()-1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <!--高亮设置-->
+                    <li th:each="page:${paginationDTO.pages}" th:class="${paginationDTO.getPage()==page}?'active':'' ">
+                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:if="${paginationDTO.showNext}">
+                        <!--tht next page-->
+                        <a th:href="@{'/profile/'+${section}(page=${paginationDTO.getPage()+1})}" href="#" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${paginationDTO.showLastPage}">
+                        <!--tht last page-->
+                        <a th:href="@{'/profile/'+${section}(page=${paginationDTO.getTotalPage()})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!--右边侧栏-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="list-group profile-list-group">
+                <a href="/profile/myTucao" th:class="${section=='myTucao'}?'list-group-item-info list-group-item':'list-group-item'">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 我的吐槽
+                    <span class="badge" th:text="${myTucaoCount}"></span>
+                </a>
+                <a href="/profile/myThumbUp" th:class="${section=='myThumbUp'}?'list-group-item-info list-group-item':'list-group-item'">
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> 我的点赞
+                    <span class="badge">1</span>
+                </a>
+                <a href="/profile/myMessage" th:class="${section=='myMessage'}?'list-group-item-info list-group-item':'list-group-item'">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> 我的消息
+                    <span class="badge">11</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
