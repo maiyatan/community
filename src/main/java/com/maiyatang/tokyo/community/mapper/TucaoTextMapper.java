@@ -2,10 +2,7 @@ package com.maiyatang.tokyo.community.mapper;
 
 import com.maiyatang.tokyo.community.model.TucaoText;
 import com.maiyatang.tokyo.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ public interface TucaoTextMapper {
     // insert the text
     @Insert("insert into TOCAO_Text(creator,title,description,tag,create_time,modified_time) values " +
             "(#{creator},#{title},#{description},#{tag},#{createTime},#{modifiedTime})")
-    void insertTocaoText(TucaoText text);
+    void insertTucaoText(TucaoText text);
 
     // ツッコミ情報を取得する
     @Select("select * from TOCAO_Text limit #{offSet},#{size} ")
@@ -34,4 +31,7 @@ public interface TucaoTextMapper {
 
     @Select("select * from TOCAO_Text where text_id=#{textId}")
     TucaoText getTucaoInfoByTextId(Integer textId);
+
+    @Update("UPDATE TOCAO_Text SET title = #{title},description = #{description},tag = #{tag},modified_time = #{modifiedTime} WHERE text_id = #{textId}")
+    void updateTucaoText(TucaoText tucaoText);
 }

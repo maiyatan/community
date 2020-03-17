@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 @Controller
 public class PublishController {
     @Autowired(required = false)
-    TucaoTextMapper toCaotext;
+    TucaoTextMapper tucaoTextMapper;
 
     @Autowired(required = false)
     UserMapper userMapper;
@@ -29,21 +28,31 @@ public class PublishController {
     @Autowired(required = false)
     PublishService publishService;
 
+    /**
+     * ツッコミ情報を編集
+     * @param textId
+     * @param model
+     * @return
+     */
     @GetMapping("/publish/{textId}")
-    public String publishGet(@PathVariable(value = "textId") Integer textId,
-                            Model model) {
+    public String edit(@PathVariable(value = "textId") Integer textId,
+                       Model model) {
         TucaoTextDTO tucaoTextDTO= publishService.getEditTucaoText(textId);
         // 画面を利用するため、値を渡す
         model.addAttribute("title", tucaoTextDTO.getTitle());
         model.addAttribute("description", tucaoTextDTO.getDescription());
         model.addAttribute("tag", tucaoTextDTO.getTag());
+        model.addAttribute("textId",tucaoTextDTO.getTextId());
         return "publish";
     }
+    @GetMapping("/publish")
+    public String publish(){return "publish";}
 
-    @PostMapping("/publish/write")
+    @PostMapping("/publish")
     public String publishPost(@RequestParam(value = "title") String title,
                               @RequestParam(value = "description") String description,
                               @RequestParam(value = "tag") String tag,
+                              @RequestParam(value = "textId") Integer textId,
                               HttpServletRequest request,
                               HttpServletResponse response,
                               Model model) {
@@ -67,10 +76,10 @@ public class PublishController {
         tucaoText.setTitle(title);
         tucaoText.setDescription(description);
         tucaoText.setTag(tag);
-        tucaoText.setCreateTime(System.currentTimeMillis());
-        tucaoText.setModifiedTime(tucaoText.getCreateTime());
+        tucaoText.setTextId(textId);
 
-        toCaotext.insertTocaoText(tucaoText);
+        publishService.createOrUpdateTucaoText(tucaoText);
+//        tucaoTextMapper.insertTocaoText(tucaoText);
 
         return "redirect:/";
     }

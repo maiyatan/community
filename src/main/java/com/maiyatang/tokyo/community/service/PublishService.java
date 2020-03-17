@@ -3,14 +3,10 @@ package com.maiyatang.tokyo.community.service;
 import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
 import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
-import com.maiyatang.tokyo.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
 
 /**
  * publish service
@@ -54,5 +50,17 @@ public class PublishService {
         TucaoTextDTO tucaoTextDTO = new TucaoTextDTO();
         BeanUtils.copyProperties(tucaoText,tucaoTextDTO);
         return tucaoTextDTO;
+    }
+
+    public void createOrUpdateTucaoText(TucaoText tucaoText) {
+        TucaoText tucaoInfo = tucaoTextMapper.getTucaoInfoByTextId(tucaoText.getTextId());
+        if (tucaoInfo==null){
+            tucaoText.setCreateTime(System.currentTimeMillis());
+            tucaoText.setModifiedTime(tucaoText.getCreateTime());
+            tucaoTextMapper.insertTucaoText(tucaoText);
+        }else {
+            tucaoText.setModifiedTime(System.currentTimeMillis());
+            tucaoTextMapper.updateTucaoText(tucaoText);
+        }
     }
 }
