@@ -5,6 +5,7 @@ import com.maiyatang.tokyo.community.dto.GithubUser;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.User;
 import com.maiyatang.tokyo.community.provider.GithubProvider;
+import com.maiyatang.tokyo.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,17 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.util.UUID;
 
 @Controller
-public class AuthoriaController {
+public class AuthorizeController {
 
     @Autowired
     private GithubProvider githubProvider;
 
-    @Autowired(required=false)
-    private UserMapper uerMapper;
+    @Autowired
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -35,7 +35,7 @@ public class AuthoriaController {
     private String uri;
 
     /**
-     * login
+     * login ログイン
      * @param code
      * @param state
      * @param request
@@ -43,10 +43,10 @@ public class AuthoriaController {
      * @return githubUser
      */
     @GetMapping("/callback")
-    public String callback(@RequestParam(value = "code", required = false) String code,
-                           @RequestParam(value = "state", required = false) String state,
-                           HttpServletRequest request, HttpServletResponse response,
-                             Model model) {
+    public String login(@RequestParam(value = "code", required = false) String code,
+                        @RequestParam(value = "state", required = false) String state,
+                        HttpServletRequest request, HttpServletResponse response,
+                        Model model) {
 
         //AccessTokenDTOの値を設定する
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -58,22 +58,20 @@ public class AuthoriaController {
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
-        if (githubUser!=null){
-            User user = new User();
+        if (githubUser!=null && githubUser.getId()!=null){
+            User user =new User();
             user.setName(githubUser.getLogin());
             user.setAccountId(githubUser.getId().toString());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             //生成36位的UUID，作为唯一标识的token
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setCreateTime(System.currentTimeMillis());
-            user.setModifiedTime(user.getCreateTime());
-            user.setAvatarUrl(githubUser.getAvatarUrl());
-            // ユーザー個人情報をテーブルuserにセット
-            uerMapper.insertGithubUser(user);
+            // userを新規まだは更新する
+            userService.createOrUpdate(user);
             // add cookie in response
             response.addCookie(new Cookie("token",token));
-//            // cookie,sessionを作る
-//            request.getSession().setAttribute("user",githubUser);
+            // cookie,sessionを作る
+            request.getSession().setAttribute("user",user);
             return "redirect:/";
         }else {
             return "redirect:/";
@@ -81,5 +79,22 @@ public class AuthoriaController {
 
     }
 
+    /**
+     * logout
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        //attributeを削除
+        request.getSession().removeAttribute("user");
+        // delete token
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+    }
 
 }

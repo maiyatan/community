@@ -17,21 +17,21 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class IndexController {
     @Autowired(required = false)
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired(required = false)
-    TucaoInfoService indexService;
+    private TucaoInfoService indexService;
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
                         Model model,
-                        @RequestParam(value = "page",defaultValue = "1") Integer page,
-                        @RequestParam(value = "size",defaultValue = "5") Integer size) {
+                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+                        @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
         // ツッコミ情報を取得する
-        PaginationDTO paginationDTO = indexService.getTucaoInfoList(page,size);
+        PaginationDTO paginationDTO = indexService.getTucaoInfoList(page, size);
         // user情報をTucaoTextDTOに入れる
 
-        model.addAttribute("paginationDTO",paginationDTO);
+        model.addAttribute("paginationDTO", paginationDTO);
 
         return "index";
     }

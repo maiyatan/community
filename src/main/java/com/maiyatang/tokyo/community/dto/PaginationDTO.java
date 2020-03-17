@@ -24,6 +24,8 @@ public class PaginationDTO {
     private boolean showFirstPage;
     //显示最后一页
     private boolean showLastPage;
+    // 显示条数
+    private int size;
 
     /**
      * 分页设置

@@ -32,6 +32,7 @@ public class ProfileController {
         User user = (User) request.getSession().getAttribute("user");
         Integer userId = user.getId();
         PaginationDTO paginationDTO = new PaginationDTO();
+        paginationDTO.setSize(size);
         // myTucao
         if ("myTucao".equals(action)) {
             model.addAttribute("section", "myTucao");

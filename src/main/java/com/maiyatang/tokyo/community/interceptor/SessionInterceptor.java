@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
