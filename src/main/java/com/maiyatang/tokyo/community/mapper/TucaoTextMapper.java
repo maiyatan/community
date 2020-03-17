@@ -31,4 +31,7 @@ public interface TucaoTextMapper {
     // ツッコミ情報の件数を取得する(by userId)
     @Select("SELECT COUNT(1) FROM TOCAO_Text where creator=#{userId};")
     Integer getTucaoInfoCountByUserId(@Param(value = "userId") Integer userId);
+
+    @Select("select * from TOCAO_Text where text_id=#{textId}")
+    TucaoText getTucaoInfoByTextId(Integer textId);
 }

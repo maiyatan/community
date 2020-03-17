@@ -30,7 +30,7 @@
                     <li class="active"><a href="/">主页 <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">奇葩日本</a></li>
                     <li><a href="#">黑暗料理</a></li>
-                        <li><a href="/publish" th:if="${session.user} != null" style="font-weight: bold;color: red">我要吐槽 <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span></a></li>
+                        <li><a href="/publish/write" th:if="${session.user} != null" style="font-weight: bold;color: red">我要吐槽 <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${session.user} == null"><a

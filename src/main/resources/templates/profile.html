@@ -24,9 +24,11 @@
             </h2>
             <!--分割线-->
             <hr>
-            <div class="media" th:each="tucaoInfo:${paginationDTO.tucaoInfo}    ">
+            <div class="media" th:each="tucaoInfo:${paginationDTO.tucaoInfo}">
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    <a th:href="@{'/tucaoText/'+${tucaoInfo.getTextId()}}">
+                        <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    </a>
                     <div th:text="${tucaoInfo.description}"></div>
                     <div>
                         <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •

@@ -1,5 +1,6 @@
 package com.maiyatang.tokyo.community.controller;
 
+import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
 import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,14 +29,20 @@ public class PublishController {
     @Autowired(required = false)
     PublishService publishService;
 
-    @GetMapping("/publish")
-    public String publishGet() {
+    @GetMapping("/publish/{textId}")
+    public String publishGet(@PathVariable(value = "textId") Integer textId,
+                            Model model) {
+        TucaoTextDTO tucaoTextDTO= publishService.getEditTucaoText(textId);
+        // 画面を利用するため、値を渡す
+        model.addAttribute("title", tucaoTextDTO.getTitle());
+        model.addAttribute("description", tucaoTextDTO.getDescription());
+        model.addAttribute("tag", tucaoTextDTO.getTag());
         return "publish";
     }
 
-    @PostMapping("/publish")
-    public String publishPost(@Valid @RequestParam(value = "title") String title,
-                              @Valid @RequestParam(value = "description") String description,
+    @PostMapping("/publish/write")
+    public String publishPost(@RequestParam(value = "title") String title,
+                              @RequestParam(value = "description") String description,
                               @RequestParam(value = "tag") String tag,
                               HttpServletRequest request,
                               HttpServletResponse response,

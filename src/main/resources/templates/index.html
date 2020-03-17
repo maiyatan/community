@@ -27,7 +27,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    <a th:href="@{'/tucaoText/'+${tucaoInfo.getTextId()}}">
+                        <h4 class="media-heading" th:text="${tucaoInfo.title}"></h4>
+                    </a>
                     <div th:text="${tucaoInfo.description}"></div>
                     <div>
                         <span th:text="${tucaoInfo.getCommentCount()}"></span> 个回复 •
@@ -38,8 +40,6 @@
                     </div>
                 </div>
             </div>
-            <!--分割线-->
-            <hr>
             <!--分页-->
             <nav aria-label="Page navigation">
             <ul class="pagination">

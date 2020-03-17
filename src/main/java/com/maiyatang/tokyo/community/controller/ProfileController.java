@@ -1,11 +1,9 @@
 package com.maiyatang.tokyo.community.controller;
 
 import com.maiyatang.tokyo.community.dto.PaginationDTO;
-import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
 import com.maiyatang.tokyo.community.model.User;
-import com.maiyatang.tokyo.community.service.ProfileService;
+import com.maiyatang.tokyo.community.service.TucaoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ProfileController {
     @Autowired
-    ProfileService profileService;
+    TucaoInfoService tucaoInfoService;
 
 
     @GetMapping("/profile/{action}")
@@ -39,7 +37,7 @@ public class ProfileController {
             model.addAttribute("section", "myTucao");
             model.addAttribute("sectionName", "我的吐槽");
             //　useridからツッコミ情報を取得する
-            paginationDTO = profileService.getMyTucaoInfo(userId, page, size);
+            paginationDTO = tucaoInfoService.getMyTucaoInfoByUserId(userId, page, size);
         }
         // myMessage
         if ("myMessage".equals(action)) {
@@ -54,7 +52,7 @@ public class ProfileController {
         }
         model.addAttribute("paginationDTO", paginationDTO);
         // ツッコミ情報件数
-        Integer myTucaoCount = profileService.getTucaoInfoCountByUserId(userId);
+        Integer myTucaoCount = tucaoInfoService.getTucaoInfoCountByUserId(userId);
         model.addAttribute("myTucaoCount", myTucaoCount);
 
         return "profile";

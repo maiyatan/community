@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="吐槽日本"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/tucaoText.css">
+    <script src="/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<!--ヘーダを導入する-->
+<div th:insert="~{header::header}"></div>
+<!--body-->
+<div class="container-fluid container-text">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2>
+                <span th:text=" ${tucaoTextDTO.title}"></span>
+            </h2>
+            <!--分割线-->
+            <hr>
+            <ol class="breadcrumb">
+                <li><span th:text="${tucaoTextDTO.getCommentCount()}"></span> 个回复 </li>
+                <li><span th:text="${tucaoTextDTO.getViewCount()}"></span> 次浏览 </li>
+                <li><span th:text="${tucaoTextDTO.getLikeCount()}"></span> <span class="glyphicon glyphicon-thumbs-up"
+                                                                                 aria-hidden="true"></span> </li>
+                <li th:text="${#dates.format(tucaoTextDTO.getCreateTime(),'yyyy-MM-dd')}"></li>
+            </ol>
+            <div class="media">
+                <div class="media-body">
+                    <div th:text="${tucaoTextDTO.description}"></div>
+                </div>
+            </div>
+            <ol class="breadcrumb" th:if="${session.user!=null && session.user.getId()==tucaoTextDTO.creator}">
+                <li><a th:href="@{'/publish/'+${tucaoTextDTO.textId}}">
+                    <span class="glyphicon glyphicon-edit"
+                                      aria-hidden="true"></span> 编辑</a>
+                </li>
+                <li><a href="#"> <span class="glyphicon glyphicon-trash"
+                                       aria-hidden="true"></span> 删除</a>
+                </li>
+            </ol>
+        </div>
+        <!--右边侧栏-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <ul class="nav navbar-nav">
+                <li><img th:src="${tucaoTextDTO.user.avatarUrl}" alt="" class="img-circle tucaoText-img-avatar"></li>
+                <li class="tucaoText-userName" th:text="${tucaoTextDTO.user.getName()}"></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
