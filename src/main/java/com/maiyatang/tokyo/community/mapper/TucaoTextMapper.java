@@ -1,37 +1,41 @@
 package com.maiyatang.tokyo.community.mapper;
 
 import com.maiyatang.tokyo.community.model.TucaoText;
-import com.maiyatang.tokyo.community.model.User;
-import org.apache.ibatis.annotations.*;
-
+import com.maiyatang.tokyo.community.model.TucaoTextExample;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-@Mapper
 public interface TucaoTextMapper {
+    long countByExample(TucaoTextExample example);
 
-    // insert the text
-    @Insert("insert into TOCAO_Text(creator,title,description,tag,create_time,modified_time) values " +
-            "(#{creator},#{title},#{description},#{tag},#{createTime},#{modifiedTime})")
-    void insertTucaoText(TucaoText text);
+    int deleteByExample(TucaoTextExample example);
 
-    // ツッコミ情報を取得する
-    @Select("select * from TOCAO_Text limit #{offSet},#{size} ")
-    List<TucaoText> getTucaoInfo(@Param(value = "offSet") Integer page, @Param(value = "size") Integer size);
+    int deleteByPrimaryKey(Integer textId);
 
-    // ツッコミ情報の件数を取得する
-    @Select("SELECT COUNT(1) FROM TOCAO_Text;")
-    Integer getTucaoInfoCount();
+    int insert(TucaoText record);
 
-    // ツッコミ情報を取得する(by userId)
-    @Select("select * from TOCAO_Text where creator=#{userId} limit #{offSet},#{size} ")
-    List<TucaoText> getTucaoInfoByUserId(@Param(value = "userId") Integer userId, @Param(value = "offSet") Integer page, @Param(value = "size") Integer size);
-    // ツッコミ情報の件数を取得する(by userId)
-    @Select("SELECT COUNT(1) FROM TOCAO_Text where creator=#{userId};")
-    Integer getTucaoInfoCountByUserId(@Param(value = "userId") Integer userId);
+    int insertSelective(TucaoText record);
 
-    @Select("select * from TOCAO_Text where text_id=#{textId}")
-    TucaoText getTucaoInfoByTextId(Integer textId);
+    List<TucaoText> selectByExampleWithBLOBsWithRowbounds(TucaoTextExample example, RowBounds rowBounds);
 
-    @Update("UPDATE TOCAO_Text SET title = #{title},description = #{description},tag = #{tag},modified_time = #{modifiedTime} WHERE text_id = #{textId}")
-    void updateTucaoText(TucaoText tucaoText);
+    List<TucaoText> selectByExampleWithBLOBs(TucaoTextExample example);
+
+    // 分页
+    List<TucaoText> selectByExampleWithRowbounds(TucaoTextExample example, RowBounds rowBounds);
+
+    List<TucaoText> selectByExample(TucaoTextExample example);
+
+    TucaoText selectByPrimaryKey(Integer textId);
+
+    int updateByExampleSelective(@Param("record") TucaoText record, @Param("example") TucaoTextExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") TucaoText record, @Param("example") TucaoTextExample example);
+
+    int updateByExample(@Param("record") TucaoText record, @Param("example") TucaoTextExample example);
+
+    int updateByPrimaryKeySelective(TucaoText record);
+    int updateByPrimaryKeyWithBLOBs(TucaoText record);
+
+    int updateByPrimaryKey(TucaoText record);
 }

@@ -5,7 +5,9 @@ import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
 import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
+import com.maiyatang.tokyo.community.model.TucaoTextExample;
 import com.maiyatang.tokyo.community.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,9 @@ public class TucaoInfoService {
      */
     public PaginationDTO getTucaoInfoList(Integer page, Integer size) {
         Integer offSet = size * (page - 1);
+//        List<TucaoText> tucaoInfoList = tucaoTextMapper.getTucaoInfo(offSet, size);
         // ツッコミ情報を取得する
-        List<TucaoText> tucaoInfoList = tucaoTextMapper.getTucaoInfo(offSet, size);
+        List<TucaoText> tucaoInfoList = tucaoTextMapper.selectByExampleWithRowbounds(new TucaoTextExample(), new RowBounds(offSet, size));
         List<TucaoTextDTO> tucaoInfDtoList = new ArrayList<TucaoTextDTO>();
 
         for (TucaoText tucaoInfo : tucaoInfoList) {
@@ -41,7 +44,7 @@ public class TucaoInfoService {
             BeanUtils.copyProperties(tucaoInfo, tucaoTextDto);
             // userを取得する
             Integer creator = tucaoInfo.getCreator();
-            User user = userMapper.findByUserId(creator);
+            User user = userMapper.selectByPrimaryKey(creator);
             tucaoTextDto.setUser(user);
             // tucaoInfDtoListに追加する
             tucaoInfDtoList.add(tucaoTextDto);
@@ -49,7 +52,7 @@ public class TucaoInfoService {
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setTucaoInfo(tucaoInfDtoList);
         // ツッコミ情報の件数を取得する
-        Integer totalCount = tucaoTextMapper.getTucaoInfoCount();
+        Integer totalCount = (int) tucaoTextMapper.countByExample(new TucaoTextExample());
         // page分ける
         paginationDTO.setPagination(page, size, totalCount);
 
@@ -66,7 +69,7 @@ public class TucaoInfoService {
      */
     public PaginationDTO getMyTucaoInfoByUserId(Integer userId, Integer page, Integer size) {
         Integer offSet = size * (page - 1);
-        List<TucaoText> tucaoInfoList = tucaoTextMapper.getTucaoInfoByUserId(userId, offSet, size);
+        List<TucaoText> tucaoInfoList = tucaoTextMapper.selectByExampleWithRowbounds(new TucaoTextExample(), new RowBounds(offSet, size));
         List<TucaoTextDTO> tucaoInfDtoList = new ArrayList<TucaoTextDTO>();
 
         for (TucaoText tucaoInfo : tucaoInfoList) {
@@ -74,7 +77,7 @@ public class TucaoInfoService {
             BeanUtils.copyProperties(tucaoInfo, tucaoTextDto);
             // userを取得する
             Integer creator = tucaoInfo.getCreator();
-            User user = userMapper.findByUserId(creator);
+            User user = userMapper.selectByPrimaryKey(creator);
             tucaoTextDto.setUser(user);
             // tucaoInfDtoListに追加する
             tucaoInfDtoList.add(tucaoTextDto);
@@ -82,7 +85,9 @@ public class TucaoInfoService {
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setTucaoInfo(tucaoInfDtoList);
         // ツッコミ情報の件数を取得する
-        Integer totalCount = tucaoTextMapper.getTucaoInfoCountByUserId(userId);
+        TucaoTextExample tucaoTextExample = new TucaoTextExample();
+        tucaoTextExample.createCriteria().andCreatorEqualTo(userId);
+        Integer totalCount = (int) tucaoTextMapper.countByExample(tucaoTextExample);
         // page分ける
         paginationDTO.setPagination(page, size, totalCount);
 
@@ -96,14 +101,17 @@ public class TucaoInfoService {
      * @return
      */
     public Integer getTucaoInfoCountByUserId(Integer userId) {
-        return tucaoTextMapper.getTucaoInfoCountByUserId(userId);
+        TucaoTextExample tucaoTextExample = new TucaoTextExample();
+        tucaoTextExample.createCriteria().andCreatorEqualTo(userId);
+        Integer totalCount = (int) tucaoTextMapper.countByExample(tucaoTextExample);
+        return totalCount;
     }
 
     public TucaoTextDTO getTucaoInfoByTextId(Integer textId) {
         TucaoTextDTO tucaoTextDto = new TucaoTextDTO();
-        TucaoText tucaoInfo = tucaoTextMapper.getTucaoInfoByTextId(textId);
+        TucaoText tucaoInfo = tucaoTextMapper.selectByPrimaryKey(textId);
         BeanUtils.copyProperties(tucaoInfo, tucaoTextDto);
-        User user = userMapper.findByUserId(tucaoInfo.getCreator());
+        User user = userMapper.selectByPrimaryKey(tucaoInfo.getCreator());
         tucaoTextDto.setUser(user);
         return tucaoTextDto;
     }

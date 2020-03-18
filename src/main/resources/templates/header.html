@@ -30,7 +30,7 @@
                     <li class="active"><a href="/">主页 <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">奇葩日本</a></li>
                     <li><a href="#">黑暗料理</a></li>
-                        <li><a href="/publish/write" th:if="${session.user} != null" style="font-weight: bold;color: red">我要吐槽 <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span></a></li>
+                        <li><a href="/publish/" th:if="${session.user} != null" style="font-weight: bold;color: red">我要吐槽 <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li th:if="${session.user} == null"><a
@@ -38,13 +38,13 @@
                     </li>
                     <li><a href="#">帮助 <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a></li>
 
-                    <li><img th:src="${session.user.avatarUrl}" alt="" class="img-circle img-avatar"></li>
+                    <li><img th:if="${session.user} != null" th:src="${session.user.avatarUrl}" alt="" class="img-circle img-avatar"></li>
                     <li class="dropdown" th:if="${session.user} != null">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false" th:text="${session.user.name}"></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/myTucao">个人中心</a></li>
-                            <li><a href="#">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
                 </ul>

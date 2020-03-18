@@ -21,9 +21,10 @@
             <!--分割线-->
             <hr>
             <form action="/publish" method="post">
+
+                <input type="hidden" th:value="${textId}" name="textId">
                 <div class="form-group">
                     <label for="title">标题</label>
-                    <!--/*@thymesVar id="title" type=""*/-->
                     <input  type="text" class="form-control" id="title" name="title" placeholder="标题" th:value="${title}">
                 </div>
                 <div class="form-group">

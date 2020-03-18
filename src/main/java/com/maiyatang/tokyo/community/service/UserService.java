@@ -1,18 +1,12 @@
 package com.maiyatang.tokyo.community.service;
 
-import com.maiyatang.tokyo.community.dto.GithubUser;
-import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
-import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
-import com.maiyatang.tokyo.community.model.TucaoText;
 import com.maiyatang.tokyo.community.model.User;
-import org.springframework.beans.BeanUtils;
+import com.maiyatang.tokyo.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
-import javax.servlet.http.Cookie;
-import java.util.UUID;
+import java.util.List;
 
 /**
  * user service
@@ -24,17 +18,21 @@ public class UserService {
 
     public void createOrUpdate(User user) {
         // user存在かないか判断
-        User oldUser = userMapper.findByAccountId(user.getAccountId());
-        if(oldUser!=null){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        List<User> users = userMapper.selectByExample(userExample);
+//        User oldUser = userMapper.findByAccountId(user.getAccountId());
+        if(!users.isEmpty()){
+            User oldUser =users.get(0);
             oldUser.setToken(user.getToken());
             oldUser.setModifiedTime(System.currentTimeMillis());
             // ユーザー個人情報を更新
-            userMapper.updateGithubUser(oldUser);
+            userMapper.updateByPrimaryKeySelective(oldUser);
         }else{
             user.setCreateTime(System.currentTimeMillis());
             user.setModifiedTime(user.getCreateTime());
             // ユーザー個人情報を挿入
-            userMapper.insertGithubUser(user);
+            userMapper.insert(user);
         }
     }
 }

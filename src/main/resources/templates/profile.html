@@ -42,7 +42,7 @@
             <!--分割线-->
             <hr>
             <!--分页-->
-            <nav aria-label="Page navigation">
+            <nav aria-label="Page navigation" th:if="${paginationDTO.getTotalPage()>paginationDTO.getSize()}">
                 <ul class="pagination">
                     <li th:if="${paginationDTO.showFirstPage}">
                         <!--the first page-->
