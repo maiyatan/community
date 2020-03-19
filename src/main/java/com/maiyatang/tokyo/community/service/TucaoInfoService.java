@@ -2,6 +2,9 @@ package com.maiyatang.tokyo.community.service;
 
 import com.maiyatang.tokyo.community.dto.PaginationDTO;
 import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
+import com.maiyatang.tokyo.community.exception.CustomizeErrorCode;
+import com.maiyatang.tokyo.community.exception.CustomizeException;
+import com.maiyatang.tokyo.community.mapper.TucaoTextExtMapper;
 import com.maiyatang.tokyo.community.mapper.TucaoTextMapper;
 import com.maiyatang.tokyo.community.mapper.UserMapper;
 import com.maiyatang.tokyo.community.model.TucaoText;
@@ -11,6 +14,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,8 @@ public class TucaoInfoService {
     UserMapper userMapper;
     @Autowired(required = false)
     TucaoTextMapper tucaoTextMapper;
+    @Autowired(required = false)
+    TucaoTextExtMapper tucaoTextExtMapper;
 
     /**
      * ツッコミ情報を取得する
@@ -109,10 +115,29 @@ public class TucaoInfoService {
 
     public TucaoTextDTO getTucaoInfoByTextId(Integer textId) {
         TucaoTextDTO tucaoTextDto = new TucaoTextDTO();
+        TucaoTextExample tucaoTextExample = new TucaoTextExample();
+        tucaoTextExample.createCriteria().andTextIdEqualTo(textId);
+//        TucaoText tucaoInfo = tucaoTextMapper.selectByPrimaryKey(textId);
+        // textidで内容があるかを判断
+        long count = tucaoTextMapper.countByExample(tucaoTextExample);
+        if (count==0){
+            throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_ERROR);
+        }
+        // 更新したツッコミ情報を取得
         TucaoText tucaoInfo = tucaoTextMapper.selectByPrimaryKey(textId);
         BeanUtils.copyProperties(tucaoInfo, tucaoTextDto);
         User user = userMapper.selectByPrimaryKey(tucaoInfo.getCreator());
         tucaoTextDto.setUser(user);
         return tucaoTextDto;
+    }
+
+    public void incViewCount(Integer textId){
+        TucaoText tucoText = new TucaoText();
+        tucoText.setTextId(textId);
+        tucoText.setViewCount(1);
+        //閲覧数を上げる
+        tucaoTextExtMapper.incViewCount(tucoText);
+        TucaoText tucaoInfo = tucaoTextMapper.selectByPrimaryKey(textId);
+        //TODO 更新的阅览数总是少一个，不是最新
     }
 }

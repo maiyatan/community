@@ -1,6 +1,8 @@
 package com.maiyatang.tokyo.community.controller;
 
 import com.maiyatang.tokyo.community.dto.PaginationDTO;
+import com.maiyatang.tokyo.community.exception.CustomizeErrorCode;
+import com.maiyatang.tokyo.community.exception.CustomizeException;
 import com.maiyatang.tokyo.community.model.User;
 import com.maiyatang.tokyo.community.service.TucaoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

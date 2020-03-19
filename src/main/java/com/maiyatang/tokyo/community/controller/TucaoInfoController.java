@@ -1,6 +1,8 @@
 package com.maiyatang.tokyo.community.controller;
 
 import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
+import com.maiyatang.tokyo.community.exception.CustomizeException;
+import com.maiyatang.tokyo.community.model.TucaoText;
 import com.maiyatang.tokyo.community.service.TucaoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class TucaoInfoController {
                         Model model) {
 
         TucaoTextDTO tucaoTextDTO= tucaoInfoService.getTucaoInfoByTextId(textId);
+        tucaoInfoService.incViewCount(textId);
         model.addAttribute("tucaoTextDTO", tucaoTextDTO);
         return "tucaoText";
     }
