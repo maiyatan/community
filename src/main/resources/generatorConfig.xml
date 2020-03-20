@@ -34,6 +34,8 @@
         <table tableName="user" domainObjectName="User"></table>
         <!--ツッコミ情報-->
         <table tableName="tocao_text" domainObjectName="TucaoText"></table>
+        <!--コメント-->
+        <table tableName="comment" domainObjectName="Comment"></table>
 
     </context>
 </generatorConfiguration>

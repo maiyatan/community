@@ -48,6 +48,17 @@ public class PublishController {
     @GetMapping("/publish")
     public String publish(){return "publish";}
 
+    /**
+     * ツッコミ情報を新規
+     * @param title
+     * @param description
+     * @param tag
+     * @param textId
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
     @PostMapping("/publish")
     public String publishPost(@RequestParam(value = "title") String title,
                               @RequestParam(value = "description") String description,

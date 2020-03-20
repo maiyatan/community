@@ -190,12 +190,11 @@
       This element was generated on Wed Mar 18 12:42:16 JST 2020.
     -->
     insert into TOCAO_TEXT (TEXT_ID, CREATOR, TITLE, 
-      TAG, VIEW_COUNT, LIKE_COUNT, 
-      COMMENT_COUNT, CREATE_TIME, MODIFIED_TIME, 
+      TAG, CREATE_TIME, MODIFIED_TIME,
       DESCRIPTION)
     values (#{textId,jdbcType=INTEGER}, #{creator,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{tag,jdbcType=VARCHAR}, #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, 
-      #{commentCount,jdbcType=INTEGER}, #{createTime,jdbcType=BIGINT}, #{modifiedTime,jdbcType=BIGINT}, 
+      #{tag,jdbcType=VARCHAR},
+      #{createTime,jdbcType=BIGINT}, #{modifiedTime,jdbcType=BIGINT},
       #{description,jdbcType=CLOB})
   </insert>
   <insert id="insertSelective" parameterType="com.maiyatang.tokyo.community.model.TucaoText">
