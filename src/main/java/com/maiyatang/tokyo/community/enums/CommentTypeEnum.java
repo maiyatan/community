@@ -1,8 +1,8 @@
 package com.maiyatang.tokyo.community.enums;
 
 public enum CommentTypeEnum {
-    QUESTION(1),
-    COMMENT(2)
+    TUCAO(1),//ツッコミ情報
+    COMMENT(2)//　コメント
     ;
     private Integer type;
 
@@ -19,8 +19,8 @@ public enum CommentTypeEnum {
     }
 
     public static boolean isExit(Integer type) {
-        for (CommentTypeEnum commentTypeEnum: CommentTypeEnum.values()) {
-            if (commentTypeEnum.getType()==type){
+        for (CommentTypeEnum commentTypeEnum : CommentTypeEnum.values()) {
+            if (commentTypeEnum.getType() == type) {
                 return true;
             }
         }

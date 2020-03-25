@@ -1,7 +1,7 @@
 package com.maiyatang.tokyo.community.enums;
 
 public enum  ResultCodeEnum {
-    NOT_LOGIN(2002,"未登录，不能进行评论。")
+    NOT_LOGIN(2001,"未登录，不能进行评论。")
     ;
 
     ResultCodeEnum(Integer code, String message) {

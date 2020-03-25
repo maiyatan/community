@@ -8,3 +8,32 @@
     margin-left: 10px;
     font-size: x-large;
 }
+.btn-comment{
+    float: right;
+    margin-bottom: 10px;
+}
+.comment_content{
+    margin-top: 10px;
+}
+.comment-userName{
+    margin: 10px 10px;
+}
+.media-comment .comment{
+    margin: 10px;
+}
+.media-comment .icon{
+    margin: 10px;
+    cursor: pointer;
+}
+.media-comment .menu{
+    color: #999999;
+}
+.media-comment .icon:hover{
+    color: #499ef3;
+}
+.media-comment{
+    margin-bottom: 15px;
+}
+.media-comment .media-body{
+    border-bottom: 1px solid #eee;
+}

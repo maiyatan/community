@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface TucaoTextExtMapper {
     void incViewCount (TucaoText tucaoInfo);
+    void incCommentCount (TucaoText tucaoInfo);
+
 
     @Select("select * form tocao_text limit #{offSet} , #{size}")
     List<TucaoText> getTucaoInfoLimitPage(Integer offSet, Integer size);
+
 }
