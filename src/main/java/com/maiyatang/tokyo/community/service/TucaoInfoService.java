@@ -42,7 +42,9 @@ public class TucaoInfoService {
         Integer offSet = size * (page - 1);
 //        List<TucaoText> tucaoInfoList = tucaoTextMapper.getTucaoInfo(offSet, size);
         // ツッコミ情報を取得する
-        List<TucaoText> tucaoInfoList = tucaoTextMapper.selectByExampleWithRowbounds(new TucaoTextExample(), new RowBounds(offSet, size));
+        TucaoTextExample tucaoTextExample = new TucaoTextExample();
+        tucaoTextExample.setOrderByClause("create_time desc");
+        List<TucaoText> tucaoInfoList = tucaoTextMapper.selectByExampleWithRowbounds(tucaoTextExample, new RowBounds(offSet, size));
         List<TucaoTextDTO> tucaoInfDtoList = new ArrayList<TucaoTextDTO>();
 
         for (TucaoText tucaoInfo : tucaoInfoList) {

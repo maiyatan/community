@@ -28,6 +28,9 @@
 .media-comment .menu{
     color: #999999;
 }
+.active{
+    color: #499ef3;
+}
 .media-comment .icon:hover{
     color: #499ef3;
 }
@@ -36,4 +39,9 @@
 }
 .media-comment .media-body{
     border-bottom: 1px solid #eee;
+}
+.sub-comment{
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 10px;
 }

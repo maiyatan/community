@@ -1,7 +1,9 @@
 package com.maiyatang.tokyo.community.controller;
 
 import com.maiyatang.tokyo.community.dto.CommentCreateDTO;
+import com.maiyatang.tokyo.community.dto.CommentDTO;
 import com.maiyatang.tokyo.community.dto.ResultDTO;
+import com.maiyatang.tokyo.community.enums.CommentTypeEnum;
 import com.maiyatang.tokyo.community.enums.ResultCodeEnum;
 import com.maiyatang.tokyo.community.exception.CustomizeErrorCode;
 import com.maiyatang.tokyo.community.model.Comment;
@@ -14,25 +16,34 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 一级评论
+     *
+     * @param commentDTO
+     * @param model
+     * @param request
+     * @return
+     */
     @ResponseBody
-    @RequestMapping(value = "/comment",method = RequestMethod.POST)
+    @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object postComment(@RequestBody CommentCreateDTO commentDTO,
                               Model model,
                               HttpServletRequest request) {
-        User user = (User)request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
         // ログインしたかをチェックする
-        if (user==null){
-            return ResultDTO.errorOf(ResultCodeEnum.NOT_LOGIN.getCode(),ResultCodeEnum.NOT_LOGIN.getMessage());
+        if (user == null) {
+            return ResultDTO.errorOf(ResultCodeEnum.NOT_LOGIN.getCode(), ResultCodeEnum.NOT_LOGIN.getMessage());
         }
         // コメント内容をチャックする
-        if (StringUtils.isBlank(commentDTO.getComment()) || commentDTO==null){
-            model.addAttribute("errorMessage", CustomizeErrorCode.COMMENT_NULL_ERROR.getMessage());
+        if (StringUtils.isBlank(commentDTO.getComment()) || commentDTO == null) {
+            return ResultDTO.errorOf(CustomizeErrorCode.COMMENT_NULL_ERROR.getErrorCode(), CustomizeErrorCode.COMMENT_NULL_ERROR.getMessage());
         }
 
         Comment comment = new Comment();
@@ -47,5 +58,19 @@ public class CommentController {
 
 
         return ResultDTO.successOf();
+    }
+
+
+    /**
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List> comments(@PathVariable(name = "id") Integer id) {
+
+        List<CommentDTO> commentDTOS = commentService.findCommentListByTextIdAndType(id, CommentTypeEnum.COMMENT.getType());
+
+        return ResultDTO.successOf(commentDTOS);
     }
 }

@@ -1,8 +1,8 @@
 package com.maiyatang.tokyo.community.controller;
 
-import com.maiyatang.tokyo.community.dto.CommentCreateDTO;
 import com.maiyatang.tokyo.community.dto.CommentDTO;
 import com.maiyatang.tokyo.community.dto.TucaoTextDTO;
+import com.maiyatang.tokyo.community.enums.CommentTypeEnum;
 import com.maiyatang.tokyo.community.service.CommentService;
 import com.maiyatang.tokyo.community.service.TucaoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ public class TucaoInfoController {
     CommentService commentService;
 
     @GetMapping("/tucaoText/{textId}")
-    public String hello(@PathVariable(name = "textId") Integer textId,
-                        Model model) {
+    public String postComment(@PathVariable(name = "textId") Integer textId,
+                              Model model) {
 
         TucaoTextDTO tucaoTextDTO= tucaoInfoService.getTucaoInfoByTextId(textId);
 
-        List<CommentDTO> comments = commentService.findCommentListByTextId(textId);
+        List<CommentDTO> comments = commentService.findCommentListByTextIdAndType(textId, CommentTypeEnum.TUCAO.getType());
         // 增加阅览数
         tucaoInfoService.incViewCount(textId);
         model.addAttribute("tucaoTextDTO", tucaoTextDTO);

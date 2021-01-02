@@ -35,35 +35,36 @@ public class CommentService {
     UserMapper userMapper;
 
     /**
-     *コメントを追加
+     * コメントを追加
+     *
      * @param comment
      */
     @Transactional
     public void insert(Comment comment) {
         // 是否选择问题的check
-        if (comment.getParentId()==null || comment.getParentId()==0){
+        if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
         }
         // 评论种类是否存在
-        if (comment.getType()==null || !CommentTypeEnum.isExit(comment.getType())) {
+        if (comment.getType() == null || !CommentTypeEnum.isExit(comment.getType())) {
             throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_ERROR);
         }
 
 
-        if (comment.getType()==CommentTypeEnum.TUCAO.getType()){
+        if (comment.getType() == CommentTypeEnum.TUCAO.getType()) {
             // 回复问题
             TucaoText tucaoText = tucaoTextMapper.selectByPrimaryKey(comment.getParentId());
-            if (tucaoText==null) {
+            if (tucaoText == null) {
                 throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_ERROR);
             }
             commentMapper.insert(comment);
             // update comment count
             incCommentCount(comment.getParentId());
 
-        }else if (comment.getType()==CommentTypeEnum.COMMENT.getType()){
+        } else if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             // 回复评论
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if (dbComment==null){
+            if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND_ERROR);
             }
             commentMapper.insert(comment);
@@ -72,9 +73,10 @@ public class CommentService {
 
     /**
      * increment comment_count
+     *
      * @param textId
      */
-    public void incCommentCount(Integer textId){
+    public void incCommentCount(Integer textId) {
         TucaoText tucoText = new TucaoText();
         tucoText.setTextId(textId);
         tucoText.setCommentCount(1);
@@ -84,16 +86,16 @@ public class CommentService {
     }
 
     /**
-     *
      * @return
      */
-    public List<CommentDTO> findCommentListByTextId(Integer textId) {
+    public List<CommentDTO> findCommentListByTextIdAndType(Integer textId, Integer type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(textId)
-                                        .andTypeEqualTo(CommentTypeEnum.TUCAO.getType());
+                .andTypeEqualTo(type);
+        commentExample.setOrderByClause("create_time desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
-        if (comments.isEmpty()){
+        if (comments.isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -113,7 +115,7 @@ public class CommentService {
         // comment转换成commentDTO
         List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
-            BeanUtils.copyProperties(comment,commentDTO);
+            BeanUtils.copyProperties(comment, commentDTO);
             commentDTO.setUser(userMap.get(comment.getCommentator()));
             return commentDTO;
         }).collect(Collectors.toList());

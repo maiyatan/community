@@ -1,9 +1,11 @@
 ##掲示板
 
-##　機能
+##機能
 
 ・登録
+
 １．github　Appを作る
+
 https://developer.github.com/apps/building-github-apps/creating-a-github-app/
 
 ・記事を追加
@@ -13,13 +15,13 @@ https://developer.github.com/apps/building-github-apps/creating-a-github-app/
 mvn flyway:migrate
 2.mybatis generator
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
-##　環境
+##環境
 ・SpringBoot
 ・MySQL/H2
 ・git
 ・mybatis
 
-## 资料
+##资料
 [Spring 文档](https://spring.io/guides)    
 [Spring Web](https://spring.io/guides/gs/serving-web-content/)   
 [es](https://elasticsearch.cn/explore)    
