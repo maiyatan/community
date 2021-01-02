@@ -18,7 +18,7 @@ class CommunityApplicationTests {
     void  case1() {
         String[] arr =new String[]{"d","w"};
         for (String s : arr) {
-            
+            int d;
         }
 
         final ArrayList<Object> objects = new ArrayList<>();
