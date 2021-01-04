@@ -1,10 +1,10 @@
-CREATE TABLE USER(
-    "ID" INT AUTO_INCREMENT PRIMARY KEY NOT NULL ,
-    "NAME" VARCHAR(50),
-    "ACCOUNT_ID" VARCHAR(100),
-    "TOKEN" CHAR(36),
-    "CREATE_TIME" BIGINT,
-    "MODIFIED_TIME" BIGINT,
-    "AVATAR_URL" VARCHAR(200)
+create table user(
+    id int not null auto_increment,
+    name varchar(50) default null,
+    account_id varchar(100),
+    token char(36),
+    create_time bigint,
+    modified_time bigint,
+    avatar_url varchar(200),
+	primary key (id)
 );
-
